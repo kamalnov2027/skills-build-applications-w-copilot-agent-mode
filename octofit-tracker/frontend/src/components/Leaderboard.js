@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
-const API_BASE = process.env.REACT_APP_CODESPACE_NAME
-  ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`
-  : '/api';
-
 export default function Leaderboard() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const endpoint = `${API_BASE}/leaderboard/`;
-    console.log('Leaderboard endpoint:', endpoint);
+    let apiBase;
+    if (process.env.REACT_APP_CODESPACE_NAME) {
+      apiBase = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+    } else if (typeof window !== 'undefined' && window.location) {
+      apiBase = `${window.location.protocol}//${window.location.hostname}:8000/api`;
+    } else {
+      apiBase = '/api';
+    }
+
+    const endpoint = `${apiBase}/leaderboard/`;
+    console.log('[Leaderboard] endpoint:', endpoint);
     fetch(endpoint)
       .then((r) => r.json())
       .then((data) => {
-        console.log('Leaderboard fetched data:', data);
+        console.log('[Leaderboard] fetched data:', data);
         const list = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
         setItems(list);
       })
-      .catch((err) => console.error('Leaderboard fetch error:', err));
+      .catch((err) => console.error('[Leaderboard] fetch error:', err));
   }, []);
 
   return (

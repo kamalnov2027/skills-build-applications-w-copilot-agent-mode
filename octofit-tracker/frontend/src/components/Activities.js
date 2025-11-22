@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
-const API_BASE = process.env.REACT_APP_CODESPACE_NAME
-  ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`
-  : '/api';
-
 export default function Activities() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const endpoint = `${API_BASE}/activities/`;
-    console.log('Activities endpoint:', endpoint);
+    // compute API base at runtime so tests that set env later work correctly
+    let apiBase;
+    if (process.env.REACT_APP_CODESPACE_NAME) {
+      apiBase = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+    } else if (typeof window !== 'undefined' && window.location) {
+      apiBase = `${window.location.protocol}//${window.location.hostname}:8000/api`;
+    } else {
+      apiBase = '/api';
+    }
+
+    const endpoint = `${apiBase}/activities/`;
+    console.log('[Activities] endpoint:', endpoint);
     fetch(endpoint)
       .then((r) => r.json())
       .then((data) => {
-        console.log('Activities fetched data:', data);
+        console.log('[Activities] fetched data:', data);
         const list = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
         setItems(list);
       })
-      .catch((err) => console.error('Activities fetch error:', err));
+      .catch((err) => console.error('[Activities] fetch error:', err));
   }, []);
 
   return (
