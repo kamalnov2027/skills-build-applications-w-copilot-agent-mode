@@ -33,14 +33,27 @@ function Workouts() {
 
   return (
     <div className="container mt-4">
-      <h2>Workouts</h2>
-      <ul className="list-group">
-        {workouts.map((workout, idx) => (
-          <li key={workout.id || idx} className="list-group-item">
-            {workout.name} - {workout.description}
-          </li>
-        ))}
-      </ul>
+      <h2 className="mb-4 display-6">Workouts</h2>
+      <div className="table-responsive">
+        <table className="table table-striped table-bordered align-middle">
+          <thead className="table-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workouts.map((workout, idx) => (
+              <tr key={workout.id || idx}>
+                <td>{idx + 1}</td>
+                <td>{workout.name}</td>
+                <td>{workout.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -1,36 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
 
-function getApiUrl() {
-  const envName = process.env.REACT_APP_CODESPACE_NAME;
-  if (envName) {
-    return `https://${envName}-8000.app.github.dev/api/activities/`;
-  }
-  // fallback to current host
-  const { protocol, hostname, port } = window.location;
-  let base = `${protocol}//${hostname}`;
-  if (port) base += `:${port}`;
-  return `${base}/api/activities/`;
-}
+import React, { useEffect, useState } from 'react';
 
-
-function Activities() {
-  const [activities, setActivities] = useState([]);
-  const apiUrl = getApiUrl();
+export default function Activities() {
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    console.log('Activities API endpoint:', apiUrl);
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        const results = data.results || data;
-        console.log('Fetched activities:', results);
-        setActivities(results);
+    let apiBase;
+    if (process.env.REACT_APP_CODESPACE_NAME) {
+      apiBase = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+    } else if (typeof window !== 'undefined' && window.location) {
+      apiBase = `${window.location.protocol}//${window.location.hostname}:8000/api`;
+    } else {
+      apiBase = '/api';
+    }
+
+    const endpoint = `${apiBase}/activities/`;
+    console.log('[Activities] endpoint:', endpoint);
+    fetch(endpoint)
+      .then((r) => r.json())
+      .then((data) => {
+        console.log('[Activities] fetched data:', data);
+        const list = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        setItems(list);
       })
-      .catch(err => {
-        console.error('Error fetching activities:', err);
-      });
-  }, [apiUrl]);
+      .catch((err) => console.error('[Activities] fetch error:', err));
+  }, []);
 
   return (
     <div className="container mt-4">
@@ -47,7 +43,7 @@ function Activities() {
             </tr>
           </thead>
           <tbody>
-            {activities.map((activity, idx) => (
+            {items.map((activity, idx) => (
               <tr key={activity.id || idx}>
                 <td>{idx + 1}</td>
                 <td>{activity.type}</td>
@@ -62,5 +58,3 @@ function Activities() {
     </div>
   );
 }
-
-export default Activities;
