@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+
 export default function Activities() {
   const [items, setItems] = useState([]);
 
@@ -12,14 +13,13 @@ export default function Activities() {
     } else {
       apiBase = '/api';
     }
-
     const endpoint = `${apiBase}/activities/`;
     console.log('[Activities] endpoint:', endpoint);
     fetch(endpoint)
       .then((r) => r.json())
       .then((data) => {
-        console.log('[Activities] fetched data:', data);
         const list = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        console.log('[Activities] fetched data:', list);
         setItems(list);
       })
       .catch((err) => console.error('[Activities] fetch error:', err));

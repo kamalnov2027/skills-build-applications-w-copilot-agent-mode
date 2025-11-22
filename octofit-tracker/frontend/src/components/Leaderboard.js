@@ -16,16 +16,16 @@ function Leaderboard() {
   const apiUrl = getApiUrl();
 
   useEffect(() => {
-    console.log('Leaderboard API endpoint:', apiUrl);
+    console.log('[Leaderboard] endpoint:', apiUrl);
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const results = data.results || data;
-        console.log('Fetched leaderboard:', results);
+        const results = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        console.log('[Leaderboard] fetched data:', results);
         setLeaderboard(results);
       })
       .catch(err => {
-        console.error('Error fetching leaderboard:', err);
+        console.error('[Leaderboard] fetch error:', err);
       });
   }, [apiUrl]);
 

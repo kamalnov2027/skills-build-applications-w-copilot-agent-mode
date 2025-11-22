@@ -18,16 +18,16 @@ function Users() {
   const apiUrl = getApiUrl();
 
   useEffect(() => {
-    console.log('Users API endpoint:', apiUrl);
+    console.log('[Users] endpoint:', apiUrl);
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const results = data.results || data;
-        console.log('Fetched users:', results);
+        const results = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        console.log('[Users] fetched data:', results);
         setUsers(results);
       })
       .catch(err => {
-        console.error('Error fetching users:', err);
+        console.error('[Users] fetch error:', err);
       });
   }, [apiUrl]);
 

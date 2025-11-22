@@ -18,16 +18,16 @@ function Workouts() {
   const apiUrl = getApiUrl();
 
   useEffect(() => {
-    console.log('Workouts API endpoint:', apiUrl);
+    console.log('[Workouts] endpoint:', apiUrl);
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const results = data.results || data;
-        console.log('Fetched workouts:', results);
+        const results = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        console.log('[Workouts] fetched data:', results);
         setWorkouts(results);
       })
       .catch(err => {
-        console.error('Error fetching workouts:', err);
+        console.error('[Workouts] fetch error:', err);
       });
   }, [apiUrl]);
 

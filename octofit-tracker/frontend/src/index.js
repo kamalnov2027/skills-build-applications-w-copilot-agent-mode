@@ -6,8 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Log the codespace name for debugging
+
+// Log the codespace name and API base for debugging
 console.log('REACT_APP_CODESPACE_NAME:', process.env.REACT_APP_CODESPACE_NAME);
+if (process.env.REACT_APP_CODESPACE_NAME) {
+  console.log('API Base:', `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/`);
+} else {
+  console.log('API Base:', window.location ? `${window.location.protocol}//${window.location.hostname}:8000/api/` : '/api/');
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

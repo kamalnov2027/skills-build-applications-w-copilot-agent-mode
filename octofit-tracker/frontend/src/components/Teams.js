@@ -18,16 +18,16 @@ function Teams() {
   const apiUrl = getApiUrl();
 
   useEffect(() => {
-    console.log('Teams API endpoint:', apiUrl);
+    console.log('[Teams] endpoint:', apiUrl);
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const results = data.results || data;
-        console.log('Fetched teams:', results);
+        const results = Array.isArray(data) ? data : (data && data.results) ? data.results : [];
+        console.log('[Teams] fetched data:', results);
         setTeams(results);
       })
       .catch(err => {
-        console.error('Error fetching teams:', err);
+        console.error('[Teams] fetch error:', err);
       });
   }, [apiUrl]);
 
