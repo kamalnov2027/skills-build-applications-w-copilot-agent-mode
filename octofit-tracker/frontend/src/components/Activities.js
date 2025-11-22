@@ -6,14 +6,14 @@ export default function Activities() {
 
   useEffect(() => {
     let apiBase;
+    let endpoint;
     if (process.env.REACT_APP_CODESPACE_NAME) {
-      apiBase = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+      endpoint = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/activities/`;
     } else if (typeof window !== 'undefined' && window.location) {
-      apiBase = `${window.location.protocol}//${window.location.hostname}:8000/api`;
+      endpoint = `${window.location.protocol}//${window.location.hostname}:8000/api/activities/`;
     } else {
-      apiBase = '/api';
+      endpoint = '/api/activities/';
     }
-    const endpoint = `${apiBase}/activities/`;
     console.log('[Activities] endpoint:', endpoint);
     fetch(endpoint)
       .then((r) => r.json())
