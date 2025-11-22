@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
-
 function getApiUrl() {
   const envName = process.env.REACT_APP_CODESPACE_NAME;
   if (envName) {
